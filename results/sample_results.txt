@@ -1,0 +1,108 @@
+Good results
+
+7nWdLUWFy4Anx7Zpzp996A
+Truth is: [u'Accepts Credit Cards', u'Has TV', u'Caters', u'Delivery', u'Smoking_no', u'Coat Check', u'Alcohol_beer_and_wine', u'Music_live', u'Take-out', u'Attire_formal', u'Ambience_touristy', u'Smoking_yes', u'Outdoor Seating', u'Parking_lot', u'Parking_street']
+Predictions are: [u'Coat Check', u'Music_live', u'Attire_formal', u'Ambience_touristy', u'Parking_lot']
+
+F8BjqcLl0dgL5Cpd8kN-vQ
+Truth is: [u'Coat Check', u'Ambience_touristy', u'Parking_garage', u'Parking_lot']
+Predictions are: [u'Coat Check', u'Music_live', u'Attire_formal', u'Smoking_yes', u'Parking_lot']
+
+_HZ5wSaupSCWs4Pub-Rytg
+Truth is: [u'Accepts Credit Cards', u'Noise_Level_average', u'Music_karaoke', u'Caters', u'Ambience_romantic', u'Price_Range_4', u'Alcohol_beer_and_wine', u'Music_live', u'Take-out', u'Smoking_yes', u'Noise_Level_loud', u'Parking_lot', u'Dietary_Restrictions_dairy-free', u'Music_background_music', u'Price_Range_2']
+Predictions are: [u'Coat Check', u'Music_live', u'Attire_formal', u'Parking_lot']
+
+fCmX7GCSMTskdg-00EjUaw
+Truth is: [u'Accepts Credit Cards', u'Caters', u'Smoking_no', u'Coat Check', u'Price_Range_4', u'Alcohol_beer_and_wine', u'Music_live', u'Take-out', u'Attire_formal', u'Ambience_touristy', u'Smoking_yes', u'Parking_lot', u'Music_background_music', u'Price_Range_2', u'Parking_street']
+Predictions are: [u'Coat Check', u'Parking_lot']
+
+muLzWCGxPTscO4V2_dCpcw
+Truth is: [u'Caters', u'Coat Check', u'Alcohol_beer_and_wine', u'Music_live', u'Take-out', u'Attire_formal', u'Ambience_touristy', u'Parking_valet', u'Smoking_yes', u'Parking_lot', u'Music_background_music', u'Price_Range_2', u'Parking_street']
+Predictions are: [u'Coat Check', u'Music_live', u'Attire_formal', u'Parking_lot']
+
+u4f6HOBWS48VCN2NSWXWrg
+Truth is: [u'Accepts Credit Cards', u'Has TV', u'Coat Check', u'Price_Range_4', u'Alcohol_beer_and_wine', u'Music_live', u'Take-out', u'Attire_formal', u'Ambience_touristy', u'Smoking_yes', u'Parking_lot', u'Good_For_dessert', u'Music_background_music', u'Parking_street']
+Predictions are: [u'Coat Check', u'Music_live', u'Attire_formal', u'Ambience_touristy', u'Parking_lot']
+
+rtc6VPOYJXdCMADGld2woQ
+Truth is: [u'Music_jukebox', u'Has TV', u'Delivery', u'Coat Check', u'Alcohol_beer_and_wine', u'Music_live', u'Take-out', u'Attire_formal', u'Ambience_touristy', u'Smoking_yes', u'Parking_lot', u'Parking_street']
+Predictions are: [u'Coat Check', u'Music_live', u'Attire_formal', u'Parking_lot']
+
+FG-nCl3qlx9BJCv6W0sueg
+Truth is: [u'Accepts Credit Cards', u'Has TV', u'Music_karaoke', u'Smoking_no', u'Alcohol_beer_and_wine', u'Music_live', u'Take-out', u'Attire_formal', u'Ambience_touristy', u'Smoking_yes', u'Outdoor Seating', u'Ambience_divey', u'Parking_lot', u'Good_For_dessert', u'Parking_street']
+Predictions are: [u'Coat Check', u'Music_live', u'Attire_formal', u'Smoking_yes', u'Parking_lot']
+
+-qggcn5xTCPclM0WOUFJLg
+Truth is: [u'Coat Check', u'Parking_lot']
+Predictions are: [u'Coat Check', u'Music_live', u'Parking_lot']
+
+OiD3xxOAgawzcdw6RQk2Vw
+Truth is: [u'Noise_Level_average', u'Music_karaoke', u'Smoking_no', u'Music_live', u'Take-out', u'Attire_formal', u'Parking_garage', u'Takes Reservations', u'Waiter Service', u'Parking_lot', u'Music_background_music', u'Price_Range_2']
+Predictions are: [u'Coat Check', u'Music_live', u'Attire_formal', u'Ambience_touristy', u'Parking_lot']
+
+0nG7YiOWY4g58mpkh_yzXQ
+Truth is: [u'Parking_lot']
+Predictions are: [u'Coat Check', u'Music_live', u'Attire_formal', u'Smoking_yes', u'Parking_lot']
+
+CXlpLgjVwtP6G7mm0eFJFQ
+Truth is: [u'Music_karaoke', u'Ambience_hipster', u'Coat Check', u'Music_live', u'Take-out', u'Attire_formal', u'Ambience_touristy', u'Parking_garage', u'Takes Reservations', u'Parking_lot', u'Music_background_music', u'Price_Range_2', u'Parking_street']
+Predictions are: [u'Coat Check', u'Music_live', u'Attire_formal', u'Parking_lot']
+
+rHDN-m-J2jmg8ii7ocuoXw
+Truth is: [u'Caters', u'Smoking_no', u'Coat Check', u'Price_Range_3', u'Price_Range_4', u'Music_live', u'Take-out', u'Attire_formal', u'Ambience_touristy', u'Parking_lot', u'Music_background_music', u'Price_Range_2', u'Parking_street', u'Good For Groups']
+Predictions are: [u'Coat Check', u'Music_live', u'Attire_formal', u'Parking_lot']
+
+WtQYFIWM_cYHOZV6owFcJA
+Truth is: [u'Music_jukebox', u'Accepts Credit Cards', u'Has TV', u'Music_karaoke', u'Caters', u'Coat Check', u'Music_live', u'Take-out', u'Attire_formal', u'Ambience_touristy', u'Parking_garage', u'Smoking_yes', u'Parking_lot', u'Music_background_music', u'Price_Range_2', u'Parking_street']
+Predictions are: [u'Coat Check', u'Music_live', u'Attire_formal', u'Parking_lot']
+
+xM4_d9yHp6QQKGwWTAgVAQ
+Truth is: [u'Accepts Credit Cards', u'Ambience_hipster', u'Smoking_no', u'Coat Check', u'Take-out', u'Attire_formal', u'Parking_garage', u'Parking_lot', u'Dietary_Restrictions_vegetarian', u'Music_background_music', u'Attire_dressy', u'Price_Range_2']
+Predictions are: [u'Coat Check', u'Music_live', u'Attire_formal', u'Ambience_touristy', u'Parking_lot']
+
+
+Bad results
+
+j-kLlTmGbhFFzKKTFjZLHQ
+Truth is: [u'Ambience_touristy']
+Predictions are: [u'Coat Check', u'Music_live', u'Attire_formal', u'Parking_lot']
+
+-_l4k1XtygapRw18pifpDA
+Truth is: [u'Ambience_touristy']
+Predictions are: [u'Music_live', u'Parking_lot']
+
+nduc1KLNDIq_LQWJMh8Uog
+Truth is: [u'Accepts Credit Cards', u'Dietary_Restrictions_vegan', u'Alcohol_beer_and_wine', u'Smoking_yes', u'Ambience_divey', u'Parking_lot', u'Good_For_dessert', u'Attire_dressy', u'Parking_street']
+Predictions are: [u'Coat Check', u'Music_live', u'Attire_formal', u'Parking_lot']
+
+gYT5FdRZWdz5UYKki18sZQ
+Truth is: [u'Accepts Credit Cards', u'Has TV', u'Music_karaoke', u'Caters', u'Smoking_no', u'Coat Check', u'Alcohol_beer_and_wine', u'Music_live', u'Take-out', u'Attire_formal', u'Ambience_touristy', u'Smoking_yes', u'Parking_lot', u'Music_background_music', u'Price_Range_2', u'Parking_street']
+Predictions are: [u'Parking_lot']
+
+S7vUA8sowM7YX34L3JGzQQ
+Truth is: [u'Coat Check', u'Parking_lot']
+Predictions are: [u'Coat Check', u'Music_live', u'Parking_lot']
+
+S2O2YpcWro0pSiLWZiC0RQ
+Truth is: [u'Ambience_divey', u'Parking_lot']
+Predictions are: [u'Parking_lot']
+
+I-MESWZvPmPJy8zr9YBlqQ
+Truth is: [u'Coat Check', u'Alcohol_beer_and_wine', u'Parking_lot']
+Predictions are: [u'Parking_lot']
+
+DyrX3rnPc5AusSm-1fJiVQ
+Truth is: [u'Accepts Credit Cards', u'Dietary_Restrictions_vegan', u'Music_karaoke', u'Ambience_hipster', u'Music_live', u'Ambience_touristy', u'Parking_garage', u'Ambience_divey', u'Parking_lot', u'Alcohol_none', u'Good For Dancing', u'Parking_validated', u'Smoking_outdoor', u'Price_Range_2']
+Predictions are: [u'Parking_lot']
+
+VzpxiZ5VSEnS1DYkoUaxEw
+Truth is: [u'Parking_garage', u'Ambience_divey', u'Parking_lot']
+Predictions are: [u'Coat Check', u'Music_live', u'Attire_formal', u'Ambience_touristy', u'Parking_lot']
+
+Mi7VsWCUK26z9WFQaf0_8Q
+Truth is: [u'Drive-Thru', u'Music_karaoke', u'Delivery', u'Alcohol_beer_and_wine', u'Music_live', u'Take-out', u'Attire_formal', u'Ambience_touristy', u'Smoking_yes', u'Ambience_divey', u'Parking_lot', u'Parking_street']
+Predictions are: [u'Parking_lot']
+
+pHbAv4ueF_TY7Ut7mFmCpg
+Truth is: [u'Ambience_divey', u'Parking_lot']
+Predictions are: [u'Coat Check', u'Music_live', u'Attire_formal', u'Ambience_touristy', u'Smoking_yes', u'Parking_lot']

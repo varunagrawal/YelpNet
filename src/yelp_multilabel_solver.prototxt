@@ -1,0 +1,17 @@
+train_net: "models/yelp_googlenet_train.prototxt"
+test_net: "models/yelp_googlenet_test.prototxt"
+test_iter: 100
+test_interval: 1000
+base_lr: 0.001
+display: 100
+max_iter: 10000
+lr_policy: "step"
+gamma: 0.1
+momentum: 0.9
+weight_decay: 0.0005
+stepsize: 2000
+snapshot: 1000
+snapshot_prefix: "snapshots"
+solver_mode: GPU
+iter_size: 1
+type: "SGD"
