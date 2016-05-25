@@ -1,0 +1,676 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>YelpNet</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width
+ initial-scale=1
+ user-scalable=no">
+    <!--<ul>if lt IE 9</ul>>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <!<ul>endif</ul>-->
+</head>
+<body>
+<div class="wrapper">
+    <header>
+        <h1 class="header">Yelpnet</h1>
+        <p class="header">Deep Learning on the Yelp Image Dataset</p>
+
+        <ul>
+            <li class="download"><a class="buttons" href="https://github.com/varunagrawal/YelpNet/zipball/master">Download ZIP</a></li>
+            <li class="download"><a class="buttons" href="https://github.com/varunagrawal/YelpNet/tarball/master">Download TAR</a></li>
+            <li><a class="buttons github" href="https://github.com/varunagrawal/YelpNet">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/varunagrawal">varunagrawal</a></p>
+
+
+    </header>
+    <section>
+        <h2>
+            Abstract
+        </h2>
+
+        <p>The Yelp Data Challenge (link it to the data challenge website) is a globally organized data challenge where in the challenge lies in creating an intelligent system that can infer semantically coherent information regarding restaurants from multi-modal data provided by Yelp, which includes images, user reviews, rating etc. In this project, we focus primarily on image data and the goal is to be able to generate multiple attributes for a given image of the restaurant and predict semantically aligned labels.</p>
+
+        <p>We formulate our problem to be of multilabel image annotation nature and explore different deep learning architectures that are suitable for our purpose. We develop a unique system that can predict multiple labels from an image of a restaurant. In this project we show how features learnt by deep learning architectures can be used to annotate a restaurant image with multiple labels.</p>
+
+        <h2>Introduction</h2>
+
+        <p>Traditional search techniques include simple word based search, where-in the user searches using a specific keyword and the results are generated from the list of keywords provided by other users. This method doesn’t give a user the flexibility to be able to search using keywords that are semantically aligned for the user and easy to interpret.</p>
+        <p>Multilabel image annotation is one of the most important challenges in computer vision with real world applications. Recently the area of deep learning using convolutional neural networks (CNNs) has made incredible strides in single image classification and object detection tasks. Single label image classification has been extensively studied by the deep learning community with the most advanced results reported by Resnet (link to the resnet paper) achieving near human accuracy. Images on the internet are generally associated with sentences or descriptions that capture the underlying essence of the image, rather than single label, and hence it is an important problem to be able to predict correct multiple labels. For example restaurant images uploaded on Yelp are accompanied with descriptions and reviews of the restaurant, along with several tags regarding the priciness of the restaurant, ambience etc. which provides a much richer representation of the visual content of the image. As a result we found it quite interesting and challenging to be able to predict multiple labels for the restaurant images that align with what humans actually perceive. Our primary goal is to develop a single system that learns a joint representation for multiple labels using specially designed loss functions, in effect capturing the relationship between multiple attributes.</p>
+
+        <p>In this project, we try to address these issues by developing a multi-task learning system that builds upon the state-of-the art Convolutional Neural Networks (CNN) based deep learning architectures. Major contributions include -
+
+        <ul>
+            <li>Developing a single CNN based system that learns multiple attributes using noisy data</li>
+            <li>Researching and implementing other multi-label loss functions in literature</li>
+        </ul>
+
+
+        <h2>Information about the Dataset</h2>
+
+        <p>For our purposes, we focus on the image data provided by Yelp. This data includes 200,000 pictures of various restaurants and business, along with 77k+ businesses ids. Each image is associated with a photo-id which maps to a business-id. A single business can have multiple images linked to it. As our initial focus is to multiple attribute annotation, we mainly focus on the attributes of each business. These attributes were generated by Yelp for each business from user reviews. A sample business id is shown below - </p>
+
+        <ul>
+            <li>"business_id": "5UmKMjUEUNdYWqANhGckJw"</li>
+            <li>"attributes": {"Take-out": true, "Drive-Thru": false, "Good For": {"dessert": false, "latenight": false, "lunch": false, "dinner": false, "brunch": false, "breakfast": false}, "Caters": false, "Noise Level": "average", "Takes Reservations": false, "Delivery": false}</li>
+        </ul>
+
+        <h2>Challenges</h2>
+        <ul>
+            <li>Noisy data</li>
+            <p>The image dataset provided is quite noisy. There are images in the dataset that include photographs of outdoor scenes, leisure photos etc which are not at all related to a restaurant.</p>
+
+
+
+
+        <li>Attributes are skewed</li>
+        <p>Distribution of attributes amongst images is not uniform. There are some attributes that occur more frequently than others. For example, Accepts Credit Card is the most commonly tagged attribute. Also as attributes were taken from yelp curators/user reviews, all businesses do not have all attributes which poses another challenge for us.</p>
+        </ul>
+
+        <p>After careful investigation we found that 64 attributes were important in terms of containing the most relevant information of the visual content of the business. These attributes range from ambience to priciness to availability of alcohol etc. Below is a partial list of the top 64 attributes - </p>
+        <ul>
+            <li>Accepts Credit Cards</li>
+            <li>Alcohol_beer_and_wine</li>
+            <li>Alcohol_full_bar</li>
+            <li>Alcohol_none</li>
+            <li>Ambience_casual</li>
+            <li>Ambience_classy</li>
+            <li>Ambience_divey</li>
+            <li>Ambience_hipster</li>
+            <li>Ambience_intimate</li>
+            <li>Ambience_romantic</li>
+            <li>Ambience_touristy</li>
+            <li>Ambience_trendy</li>
+            <li>Ambience_upscale</li>
+            <li>Attire_casual</li>
+            <li>Attire_dressy</li>
+            <li>Attire_formal</li>
+            <li>Caters</li>
+            <li>Coat Check</li>
+            <li>Delivery</li>
+            <li>Dietary_Restrictions_dairy-free</li>
+            <li>Dietary_Restrictions_gluten-free</li>
+            <li>Dietary_Restrictions_halal</li>
+            <li>Dietary_Restrictions_kosher</li>
+            <li>Dietary_Restrictions_soy-free</li>
+            <li>Dietary_Restrictions_vegan</li>
+            <li>Dietary_Restrictions_vegetarian</li>
+            <li>Drive-Thru</li>
+            <li>Good_For_breakfast</li>
+            <li>Good_For_brunch</li>
+            <li>Good_For_dessert</li>
+            <li>Good_For_dinner</li>
+            <li>Good_For_latenight</li>
+            <li>Good_For_lunch</li>
+            <li>Good For Dancing</li>
+            <li>Good For Groups</li>
+            <li>Good for Kids</li>
+            <li>Happy Hour</li>
+            <li>Has TV</li>
+            <li>Music_background_music</li>
+            <li>Music_dj</li>
+            <li>Music_jukebox</li>
+            <li>Music_karaoke</li>
+            <li>Music_live</li>
+            <li>Music_video</li>
+            <li>Noise_Level_average</li>
+            <li>Noise_Level_loud</li>
+            <li>Noise_Level_quiet</li>
+            <li>Noise_Level_very_loud</li>
+            <li>Outdoor Seating</li>
+            <li>Parking_garage</li>
+            <li>Parking_lot</li>
+            <li>Parking_street</li>
+            <li>Parking_valet</li>
+            <li>Parking_validated</li>
+            <li>Price_Range_1</li>
+            <li>Price_Range_2</li>
+            <li>Price_Range_3</li>
+            <li>Price_Range_4</li>
+            <li>Smoking_outdoor</li>
+            <li>Smoking_yes</li>
+            <li>Smoking_no</li>
+            <li>Take-out</li>
+            <li>Takes Reservations</li>
+            <li>Waiter Service</li>
+        </ul>
+
+        <p>This attribute list for each image is converted to a binary attribute vector where 1 represents the presence of that corresponding attribute in the image.</p>
+
+        <p>[0, 0, 0, 1, 0, 0, 0, 1, . . .]</p>
+        <p>Each image corresponds to a sparse attribute vector as each image corresponds to only a handful of attributes at a time.</p>
+
+        <h2>Our Methodology</h2>
+        <p>Our system was developed using Caffe framework, a very popular open source platform for deep learning development. We converted all of our training and test data to the LMDB format in order to facilitate faster development. Rather than training our network from scratch for our data, we resort to fine-tuning where in the weights learnt from a previously trained network are used to initialize the network, resulting in faster convergence. In Caffe, this is possible by renaming the last fully connected layers (fc-layers) and loss layers. Last fully connected layer contains the most visual information of an image and as a result only the last layer is trained. We start with fine-tuning <a href="">AlexNet</a>, a very popular CNN architecture developed by Alex Krizhevsky which was trained on 1.2 million images for 360,000 iterations.</p>
+
+        <p>Our network can be visualized <a href="http://ethereon.github.io/netscope/#/gist/358e98506c8eea7addba" target="_blank">here</a>.</p>
+
+        <p>Our next step was to fine-tune on a much deeper network. For this purpose we fine-tune our data on GoogLeNet, a much deeper network which was trained for 2400000 iterations for 60 epochs over the ImageNet data.</p>
+        <p>This architecture can be visualized <a href="http://ethereon.github.io/netscope/#/gist/3d1b0b10d930ad833d6d431a8309b152" target="_blank">here</a>.</p>
+
+
+        <p>For single label classification, Softmax loss is used which predicts a single class out of multiple classes based on its probability. As our purpose entails multi-label task, Softmax loss cannot be used for our purpose. To learn a joint representation among multiple attributes, different loss functions need to be derived for this purpose.</p>
+
+        <p>One loss function that is used by us is the Sigmoid Cross Entropy Loss. Sigmoid Cross Entropy loss calculates the loss amongst various classes by trying to find the measure of similarity between true distribution and the predicted distribution of labels.</p>
+
+        <!--Our parameters for training-
+        Iterations
+        Epochs
+        Loss
+
+        Below is a feature visualization from the second convolutional layer-
+        -->
+        <h2>Results</h2>
+        <p>We report the mean labelling score[1] as: 0.2861207</p>
+
+    </section>
+    <section>
+        <h2>References</h2>
+        <ol>
+            <li>Deep Learning for Multi-Label Classification - Jesse Read and Fernando Perez-Cruz</li>
+            <li>Deep Convolutional Ranking for Multilabel Image Annotation -￼Yunchao Gong et al.</li>
+            <li>CNN: Single-label to Multi-label - Yunchao Wei et al.</li>
+            <li>Deep Semantic Ranking Based Hashing for Multi-Label Image Retrieval - Fang Zhao et al. </li>
+            <li>Weakly Semi-Supervised Deep Learning for Multi-Label Image Annotation - Fei Wu et al.</li>
+            <li>CNN-RNN: A Unified Framework for Multi-label Image Classification - Jiang Wang et al.</li>
+            <li>Attribute learning in large-scale datasets - Olga Russakovsky and Li Fei-Fei</li>
+            <li>CNN Features off-the-shelf: an Astounding Baseline for Recognition - Razavian et al.</li>
+            <li>Correlative Multi-Label Multi-Instance Image Annotation - Xue et al.</li>
+        </ol>
+    </section>
+    <section>
+        <h2>
+            <a id="results" class="anchor" href="#results" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Results</h2>
+
+        <h3>
+            <a id="good-results" class="anchor" href="#good-results" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Good Results</h3>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/7nWdLUWFy4Anx7Zpzp996A.jpg"/>
+        <div>
+            <h4>Ground Truth</h4>
+            <ul>
+                <li>Accepts Credit Cards</li>
+                <li>Has TV</li>
+                <li>Caters</li>
+                <li>Delivery</li>
+                <li>Smoking_no</li>
+                <li>Coat Check</li>
+                <li>Alcohol_beer_and_wine</li>
+                <li>Music_live</li>
+                <li>Take-out</li>
+                <li>Attire_formal</li>
+                <li>Ambience_touristy</li>
+                <li>Smoking_yes</li>
+                <li>Outdoor Seating</li>
+                <li>Parking_lot</li>
+                <li>Parking_street</li></ul>
+            </ul>
+        </div>
+
+        <div>
+            <h4>Predictions</h4>
+            <ul>
+                <li>Coat Check</li>
+                <li>Music_live</li>
+                <li>Attire_formal</li>
+                <li>Ambience_touristy</li>
+                <li>Parking_lot</li>
+            </ul>
+        </div>
+        </p>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/F8BjqcLl0dgL5Cpd8kN-vQ.jpg"/>
+        <div><h4>Ground Truth</h4>
+            <ul><li>Coat Check</li>
+                <li>Ambience_touristy</li>
+                <li>Parking_garage</li>
+                <li>Parking_lot</li></ul>
+            <h4>Predictions</h4> <ul><li>Coat Check</li>
+                <li>Music_live</li>
+                <li>Attire_formal</li>
+                <li>Smoking_yes</li>
+                <li>Parking_lot</li></ul></p>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/_HZ5wSaupSCWs4Pub-Rytg.jpg"/>
+        <div><h4>Ground Truth</h4> <ul><li>Accepts Credit Cards</li>
+            <li>Noise_Level_average</li>
+            <li>Music_karaoke</li>
+            <li>Caters</li>
+            <li>Ambience_romantic</li>
+            <li>Price_Range_4</li>
+            <li>Alcohol_beer_and_wine</li>
+            <li>Music_live</li>
+            <li>Take-out</li>
+            <li>Smoking_yes</li>
+            <li>Noise_Level_loud</li>
+            <li>Parking_lot</li>
+            <li>Dietary_Restrictions_dairy-free</li>
+            <li>Music_background_music</li>
+            <li>Price_Range_2</li></ul>
+            <h4>Predictions</h4> <ul><li>Coat Check</li>
+                <li>Music_live</li>
+                <li>Attire_formal</li>
+                <li>Parking_lot</li></ul></p>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/fCmX7GCSMTskdg-00EjUaw.jpg"/>
+        <div><h4>Ground Truth</h4> <ul><li>Accepts Credit Cards</li>
+            <li>Caters</li>
+            <li>Smoking_no</li>
+            <li>Coat Check</li>
+            <li>Price_Range_4</li>
+            <li>Alcohol_beer_and_wine</li>
+            <li>Music_live</li>
+            <li>Take-out</li>
+            <li>Attire_formal</li>
+            <li>Ambience_touristy</li>
+            <li>Smoking_yes</li>
+            <li>Parking_lot</li>
+            <li>Music_background_music</li>
+            <li>Price_Range_2</li>
+            <li>Parking_street</li></ul>
+            <h4>Predictions</h4> <ul><li>Coat Check</li>
+                <li>Parking_lot</li></ul></p>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/muLzWCGxPTscO4V2_dCpcw.jpg"/>
+        <div><h4>Ground Truth</h4> <ul><li>Caters</li>
+            <li>Coat Check</li>
+            <li>Alcohol_beer_and_wine</li>
+            <li>Music_live</li>
+            <li>Take-out</li>
+            <li>Attire_formal</li>
+            <li>Ambience_touristy</li>
+            <li>Parking_valet</li>
+            <li>Smoking_yes</li>
+            <li>Parking_lot</li>
+            <li>Music_background_music</li>
+            <li>Price_Range_2</li>
+            <li>Parking_street</li></ul>
+            <h4>Predictions</h4> <ul><li>Coat Check</li>
+                <li>Music_live</li>
+                <li>Attire_formal</li>
+                <li>Parking_lot</li></ul></p>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/u4f6HOBWS48VCN2NSWXWrg.jpg"/>
+        <div><h4>Ground Truth</h4> <ul><li>Accepts Credit Cards</li>
+            <li>Has TV</li>
+            <li>Coat Check</li>
+            <li>Price_Range_4</li>
+            <li>Alcohol_beer_and_wine</li>
+            <li>Music_live</li>
+            <li>Take-out</li>
+            <li>Attire_formal</li>
+            <li>Ambience_touristy</li>
+            <li>Smoking_yes</li>
+            <li>Parking_lot</li>
+            <li>Good_For_dessert</li>
+            <li>Music_background_music</li>
+            <li>Parking_street</li></ul>
+            <h4>Predictions</h4> <ul><li>Coat Check</li>
+                <li>Music_live</li>
+                <li>Attire_formal</li>
+                <li>Ambience_touristy</li>
+                <li>Parking_lot</li></ul></p>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/rtc6VPOYJXdCMADGld2woQ.jpg"/>
+        <div><h4>Ground Truth</h4> <ul><li>Music_jukebox</li>
+            <li>Has TV</li>
+            <li>Delivery</li>
+            <li>Coat Check</li>
+            <li>Alcohol_beer_and_wine</li>
+            <li>Music_live</li>
+            <li>Take-out</li>
+            <li>Attire_formal</li>
+            <li>Ambience_touristy</li>
+            <li>Smoking_yes</li>
+            <li>Parking_lot</li>
+            <li>Parking_street</li></ul>
+            <h4>Predictions</h4> <ul><li>Coat Check</li>
+                <li>Music_live</li>
+                <li>Attire_formal</li>
+                <li>Parking_lot</li></ul></p>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/FG-nCl3qlx9BJCv6W0sueg.jpg"/>
+        <div><h4>Ground Truth</h4> <ul><li>Accepts Credit Cards</li>
+            <li>Has TV</li>
+            <li>Music_karaoke</li>
+            <li>Smoking_no</li>
+            <li>Alcohol_beer_and_wine</li>
+            <li>Music_live</li>
+            <li>Take-out</li>
+            <li>Attire_formal</li>
+            <li>Ambience_touristy</li>
+            <li>Smoking_yes</li>
+            <li>Outdoor Seating</li>
+            <li>Ambience_divey</li>
+            <li>Parking_lot</li>
+            <li>Good_For_dessert</li>
+            <li>Parking_street</li></ul>
+            <h4>Predictions</h4> <ul><li>Coat Check</li>
+                <li>Music_live</li>
+                <li>Attire_formal</li>
+                <li>Smoking_yes</li>
+                <li>Parking_lot</li></ul></p>
+
+        <p>-
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/-qggcn5xTCPclM0WOUFJLg.jpg"/>
+        <div><h4>Ground Truth</h4> <ul><li>Coat Check</li>
+            <li>Parking_lot</li></ul>
+            <h4>Predictions</h4> <ul><li>Coat Check</li>
+                <li>Music_live</li>
+                <li>Parking_lot</li></ul></p>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/OiD3xxOAgawzcdw6RQk2Vw.jpg"/>
+        <div><h4>Ground Truth</h4> <ul><li>Noise_Level_average</li>
+            <li>Music_karaoke</li>
+            <li>Smoking_no</li>
+            <li>Music_live</li>
+            <li>Take-out</li>
+            <li>Attire_formal</li>
+            <li>Parking_garage</li>
+            <li>Takes Reservations</li>
+            <li>Waiter Service</li>
+            <li>Parking_lot</li>
+            <li>Music_background_music</li>
+            <li>Price_Range_2</li></ul>
+            <h4>Predictions</h4> <ul><li>Coat Check</li>
+                <li>Music_live</li>
+                <li>Attire_formal</li>
+                <li>Ambience_touristy</li>
+                <li>Parking_lot</li></ul></p>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/0nG7YiOWY4g58mpkh_yzXQ.jpg"/>
+        <div><h4>Ground Truth</h4> <ul><li>Parking_lot</li></ul>
+            <h4>Predictions</h4> <ul><li>Coat Check</li>
+                <li>Music_live</li>
+                <li>Attire_formal</li>
+                <li>Smoking_yes</li>
+                <li>Parking_lot</li></ul></p>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/CXlpLgjVwtP6G7mm0eFJFQ.jpg"/>
+        <div><h4>Ground Truth</h4> <ul><li>Music_karaoke</li>
+            <li>Ambience_hipster</li>
+            <li>Coat Check</li>
+            <li>Music_live</li>
+            <li>Take-out</li>
+            <li>Attire_formal</li>
+            <li>Ambience_touristy</li>
+            <li>Parking_garage</li>
+            <li>Takes Reservations</li>
+            <li>Parking_lot</li>
+            <li>Music_background_music</li>
+            <li>Price_Range_2</li>
+            <li>Parking_street</li></ul>
+            <h4>Predictions</h4> <ul><li>Coat Check</li>
+                <li>Music_live</li>
+                <li>Attire_formal</li>
+                <li>Parking_lot</li></ul></p>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/rHDN-m-J2jmg8ii7ocuoXw.jpg"/>
+        <div><h4>Ground Truth</h4> <ul><li>Caters</li>
+            <li>Smoking_no</li>
+            <li>Coat Check</li>
+            <li>Price_Range_3</li>
+            <li>Price_Range_4</li>
+            <li>Music_live</li>
+            <li>Take-out</li>
+            <li>Attire_formal</li>
+            <li>Ambience_touristy</li>
+            <li>Parking_lot</li>
+            <li>Music_background_music</li>
+            <li>Price_Range_2</li>
+            <li>Parking_street</li>
+            <li>Good For Groups</li></ul>
+            <h4>Predictions</h4> <ul><li>Coat Check</li>
+                <li>Music_live</li>
+                <li>Attire_formal</li>
+                <li>Parking_lot</li></ul></p>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/WtQYFIWM_cYHOZV6owFcJA.jpg"/>
+        <div>
+            <h4>Ground Truth</h4>
+            <ul>
+                <li>Music_jukebox</li>
+                <li>Accepts Credit Cards</li>
+                <li>Has TV</li>
+                <li>Music_karaoke</li>
+                <li>Caters</li>
+                <li>Coat Check</li>
+                <li>Music_live</li>
+                <li>Take-out</li>
+                <li>Attire_formal</li>
+                <li>Ambience_touristy</li>
+                <li>Parking_garage</li>
+                <li>Smoking_yes</li>
+                <li>Parking_lot</li>
+                <li>Music_background_music</li>
+                <li>Price_Range_2</li>
+                <li>Parking_street</li>
+            </ul>
+            <h4>Predictions</h4>
+            <ul>
+                <li>Coat Check</li>
+                <li>Music_live</li>
+                <li>Attire_formal</li>
+                <li>Parking_lot</li>
+            </ul>
+        </p>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/xM4_d9yHp6QQKGwWTAgVAQ.jpg"/>
+        <div><h4>Ground Truth</h4>
+            <ul>
+                <li>Accepts Credit Cards</li>
+                <li>Ambience_hipster</li>
+                <li>Smoking_no</li>
+                <li>Coat Check</li>
+                <li>Take-out</li>
+                <li>Attire_formal</li>
+                <li>Parking_garage</li>
+                <li>Parking_lot</li>
+                <li>Dietary_Restrictions_vegetarian</li>
+                <li>Music_background_music</li>
+                <li>Attire_dressy</li>
+                <li>Price_Range_2</li>
+            </ul>
+            <h4>Predictions</h4>
+            <ul>
+                <li>Coat Check</li>
+                <li>Music_live</li>
+                <li>Attire_formal</li>
+                <li>Ambience_touristy</li>
+                <li>Parking_lot</li>
+            </ul>
+        </p>
+
+        <h3>
+            <a id="bad-results" class="anchor" href="#bad-results" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Bad Results</h3>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/j-kLlTmGbhFFzKKTFjZLHQ.jpg"/>
+        <div>
+            <h4>Ground Truth</h4>
+            <ul>
+                <li>Ambience_touristy</li>
+            </ul>
+            <h4>Predictions</h4>
+            <ul>
+                <li>Coat Check</li>
+                <li>Music_live</li>
+                <li>Attire_formal</li>
+                <li>Parking_lot</li>
+            </ul>
+        </p>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/-_l4k1XtygapRw18pifpDA.jpg"/>
+        <div>
+            <h4>Ground Truth</h4>
+            <ul>
+                <li>Ambience_touristy</li>
+            </ul>
+            <h4>Predictions</h4>
+            <ul>
+                <li>Music_live</li>
+                <li>Parking_lot</li>
+            </ul>
+        </p>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/nduc1KLNDIq_LQWJMh8Uog.jpg"/>
+        <div>
+            <h4>Ground Truth</h4>
+            <ul>
+                <li>Accepts Credit Cards</li>
+                <li>Dietary_Restrictions_vegan</li>
+                <li>Alcohol_beer_and_wine</li>
+                <li>Smoking_yes</li>
+                <li>Ambience_divey</li>
+                <li>Parking_lot</li>
+                <li>Good_For_dessert</li>
+                <li>Attire_dressy</li>
+                <li>Parking_street</li>
+            </ul>
+            <h4>Predictions</h4>
+            <ul>
+                <li>Coat Check</li>
+                <li>Music_live</li>
+                <li>Attire_formal</li>
+                <li>Parking_lot</li>
+            </ul>
+        </p>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/gYT5FdRZWdz5UYKki18sZQ.jpg"/>
+        <div><h4>Ground Truth</h4> <ul><li>Accepts Credit Cards</li>
+            <li>Has TV</li>
+            <li>Music_karaoke</li>
+            <li>Caters</li>
+            <li>Smoking_no</li>
+            <li>Coat Check</li>
+            <li>Alcohol_beer_and_wine</li>
+            <li>Music_live</li>
+            <li>Take-out</li>
+            <li>Attire_formal</li>
+            <li>Ambience_touristy</li>
+            <li>Smoking_yes</li>
+            <li>Parking_lot</li>
+            <li>Music_background_music</li>
+            <li>Price_Range_2</li>
+            <li>Parking_street</li></ul>
+            <h4>Predictions</h4> <ul><li>Parking_lot</li></ul></p>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/S7vUA8sowM7YX34L3JGzQQ.jpg"/>
+        <div><h4>Ground Truth</h4> <ul><li>Coat Check</li>
+            <li>Parking_lot</li></ul>
+            <h4>Predictions</h4> <ul><li>Coat Check</li>
+                <li>Music_live</li>
+                <li>Parking_lot</li></ul></p>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/S2O2YpcWro0pSiLWZiC0RQ.jpg"/>
+        <div><h4>Ground Truth</h4> <ul><li>Ambience_divey</li>
+            <li>Parking_lot</li></ul>
+            <h4>Predictions</h4> <ul><li>Parking_lot</li></ul></p>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/I-MESWZvPmPJy8zr9YBlqQ.jpg"/>
+        <div><h4>Ground Truth</h4> <ul><li>Coat Check</li>
+            <li>Alcohol_beer_and_wine</li>
+            <li>Parking_lot</li></ul>
+            <h4>Predictions</h4> <ul><li>Parking_lot</li></ul></p>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/DyrX3rnPc5AusSm-1fJiVQ.jpg"/>
+        <div><h4>Ground Truth</h4> <ul><li>Accepts Credit Cards</li>
+            <li>Dietary_Restrictions_vegan</li>
+            <li>Music_karaoke</li>
+            <li>Ambience_hipster</li>
+            <li>Music_live</li>
+            <li>Ambience_touristy</li>
+            <li>Parking_garage</li>
+            <li>Ambience_divey</li>
+            <li>Parking_lot</li>
+            <li>Alcohol_none</li>
+            <li>Good For Dancing</li>
+            <li>Parking_validated</li>
+            <li>Smoking_outdoor</li>
+            <li>Price_Range_2</li></ul>
+            <h4>Predictions</h4> <ul><li>Parking_lot</li></ul></p>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/VzpxiZ5VSEnS1DYkoUaxEw.jpg"/>
+        <div><h4>Ground Truth</h4> <ul><li>Parking_garage</li>
+            <li>Ambience_divey</li>
+            <li>Parking_lot</li></ul>
+            <h4>Predictions</h4> <ul><li>Coat Check</li>
+                <li>Music_live</li>
+                <li>Attire_formal</li>
+                <li>Ambience_touristy</li>
+                <li>Parking_lot</li></ul></p>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/Mi7VsWCUK26z9WFQaf0_8Q.jpg"/>
+        <div><h4>Ground Truth</h4> <ul><li>Drive-Thr<li>
+            <li>Music_karaoke</li>
+            <li>Delivery</li>
+            <li>Alcohol_beer_and_wine</li>
+            <li>Music_live</li>
+            <li>Take-out</li>
+            <li>Attire_formal</li>
+            <li>Ambience_touristy</li>
+            <li>Smoking_yes</li>
+            <li>Ambience_divey</li>
+            <li>Parking_lot</li>
+            <li>Parking_street</li></ul>
+            <h4>Predictions</h4> <ul><li>Parking_lot</li></ul></p>
+
+        <p>
+            <img src="https://raw.githubusercontent.com/varunagrawal/YelpNet/master/results/pHbAv4ueF_TY7Ut7mFmCpg.jpg"/>
+        <div><h4>Ground Truth</h4> <ul><li>Ambience_divey</li>
+            <li>Parking_lot</li></ul>
+            <h4>Predictions</h4> <ul><li>Coat Check</li>
+                <li>Music_live</li>
+                <li>Attire_formal</li>
+                <li>Ambience_touristy</li>
+                <li>Smoking_yes</li>
+                <li>Parking_lot</li></ul></p>
+
+        <h3>
+            <a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+
+        <p>This project is maintained by <a href="https://github.com/varunagrawal/">@varunagrawal</a> and Palash Shastri.</p>
+
+        <h3>
+            <a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Support or Contact</h3>
+
+        <p>This project is still under heavy development. Please raise issues in the Project Issue Tracker.</p>
+    </section>
+    <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+    </footer>
+</div>
+<!--<ul>if !IE</ul>><script>fixScale(document);</script><!<ul>endif</ul>-->
+
+</body>
+</html>
