@@ -5,6 +5,9 @@
 Notebook on multi label classification
 http://nbviewer.jupyter.org/github/BVLC/caffe/blob/master/examples/pascal-multilabel-with-datalayer.ipynb
 
+## Note
+Always use the attributes_list file to read in attributes. The order of labels in that file is to be considered the standard order.   
+
 #### Create Python Data Layer
 Look at caffe/examples/pycaffe/layers/pascal-multilabel-with-datalayer.py file to understand how to create a layer to pick up the dataset and the multilabels
 Module name: `yelp_multilabel_datalayers`
