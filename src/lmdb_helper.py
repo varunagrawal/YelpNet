@@ -30,6 +30,10 @@ def get_image_file_list(file_):
     p2b = json.load(open(file_))
     b_attributes = json.load(open("../data/business_attributes.json", 'r'))
 
+    # Read the list of attributes from the file
+    with open("../data/attributes_list") as attrs_list:
+        attributes_list = attrs_list.readlines()
+        
     for d in p2b:
         b_id = d['business_id']
         photo_id = d['photo_id']
@@ -43,7 +47,7 @@ def get_image_file_list(file_):
         # Remove the ID field as that is not an attribute
         del(a['id'])
 
-        for i, k in enumerate(a.keys()):
+        for i, k in enumerate(attributes_list:
             if not k == 'id':
                 x[i, :, :] = a[k]
 
@@ -101,11 +105,12 @@ def create_label_lmdb(labels_list):
 
 
 if len(sys.argv) < 3:
-    print("Usage: python2 lmdb_helper.py path/to/photo_2_business_id.json [train|test]")
+    print("Usage: python2 lmdb_helper.py path/to/photo_2_business_id.json [train|val|test]")
     exit()
 
 print(sys.argv)
 
+# Whether to create train, val or test LMDB
 split = sys.argv[2]
 
 image_files, labels = get_image_file_list("../data/{0}.json".format(split))

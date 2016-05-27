@@ -13,6 +13,11 @@ def run_net(net, image_file, truth, attributes, op_layer='loss3/classifierx'):
     """
     This code was mostly picked up from 
     http://nbviewer.jupyter.org/github/BVLC/caffe/blob/master/examples/pascal-multilabel-with-datalayer.ipynb
+    
+    @image_file: This is the path to the image which will be run through the network
+    @truth: This is the ground truth of the labels
+    @attributes: This is a list of attributes we are considering. We follow the same ordering as in this list everywhere.
+    @op_layer: The name of the output layer from which we get the outputs
     """
     image = Image.open(image_file)
     image = scipy.misc.imresize(image, (224, 224))  # resize
@@ -24,8 +29,8 @@ def run_net(net, image_file, truth, attributes, op_layer='loss3/classifierx'):
     prob = net.blobs[op_layer].data[0, ...] > 0
     #print(prob)
 
-    true = [attributes[ind] for ind in range(len(attributes)) if int(truth[ind]) == True]
-    predicted = [attributes[ind] for ind in range(len(attributes)) if int(prob[ind]) == True]
+    true = [attributes[ind] for ind in range(len(attributes)) if bool(truth[ind]) == True]
+    predicted = [attributes[ind] for ind in range(len(attributes)) if bool(prob[ind]) == True]
 
     # Score calculated as per http://arxiv.org/pdf/1502.05988.pdf
     numer = 0
@@ -74,11 +79,11 @@ def main():
     net = caffe.Net(model, weights, caffe.TEST)
 
     # Create a list of attributes for back-pointing the attributes to
-    attributes = []
-    for i, k in enumerate(b_attributes[0].keys()):
-        if not k == 'id':
-            attributes.append(k)
-
+    attributes_list = []
+    # Read the list of attributes from the file
+    with open("../data/attributes_list") as attrs_list:
+        attributes_list = attrs_list.readlines()
+        
     score = 0
 
     N_TEST = len(p2b)
@@ -93,15 +98,15 @@ def main():
 
         # create a copy of the attribute dict since we delete entries from the copy
         attr = dict(next(attr for attr in b_attributes if attr['id'] == b_id))
-        truth = np.zeros(len(attributes))
+        truth = np.zeros(len(attributes_list))
 
         del(attr['id'])
-        for ind, a in enumerate(attr.keys()):
+        for ind, a in enumerate(attr.sorted().keys()):
             truth[ind] = attr[a]
 
         image_file = "../data/images/" + photo_id + ".jpg"
         
-        score = score + run_net(net, image_file, truth, attributes, op_layer)
+        score = score + run_net(net, image_file, truth, attributes_list, op_layer)
 
     print("Labelling score: {0}".format(float(score) / N_TEST))
 
