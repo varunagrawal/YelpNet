@@ -83,7 +83,8 @@ def main():
     # Read the list of attributes from the file
     with open("../data/attributes_list") as attrs_list:
         attributes_list = attrs_list.readlines()
-        
+    attributes_list = [line.strip() for line in attributes_list]
+    
     score = 0
 
     N_TEST = len(p2b)

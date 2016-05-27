@@ -33,7 +33,8 @@ def get_image_file_list(file_):
     # Read the list of attributes from the file
     with open("../data/attributes_list") as attrs_list:
         attributes_list = attrs_list.readlines()
-        
+    attributes_list = [line.strip() for line in attributes_list]
+    
     for d in p2b:
         b_id = d['business_id']
         photo_id = d['photo_id']
@@ -47,7 +48,7 @@ def get_image_file_list(file_):
         # Remove the ID field as that is not an attribute
         del(a['id'])
 
-        for i, k in enumerate(attributes_list:
+        for i, k in enumerate(attributes_list):
             if not k == 'id':
                 x[i, :, :] = a[k]
 
@@ -59,6 +60,9 @@ def get_image_file_list(file_):
 
 
 def create_image_lmdb(images):
+    """
+    Create the LMDB for the images
+    """
     print("Creating image LMDB")
     height = 224
     width = 224
@@ -90,6 +94,9 @@ def create_image_lmdb(images):
 
 
 def create_label_lmdb(labels_list):
+    """
+    Create the LMDB for the labels
+    """
     print("Creating label LMDB")
 
     in_db = lmdb.open("../data/label-{0}-lmdb".format(split), map_size=int(1e12))
