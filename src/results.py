@@ -36,9 +36,9 @@ def run_net(net, image_file, truth, attributes, op_layer='loss3/classifierx'):
     numer = 0
     denom = 0
     for ind in range(len(truth)):
-        if prob[ind] and truth[ind]:
+        if bool(prob[ind]) and bool(truth[ind]):
             numer += 1
-        elif prob[ind] or truth[ind]:
+        elif bool(prob[ind]) or bool(truth[ind]):
             denom += 1
 
     if denom == 0:
@@ -102,7 +102,7 @@ def main():
         truth = np.zeros(len(attributes_list))
 
         del(attr['id'])
-        for ind, a in enumerate(attr.sorted().keys()):
+        for ind, a in enumerate(attributes_list):
             truth[ind] = attr[a]
 
         image_file = "../data/images/" + photo_id + ".jpg"
