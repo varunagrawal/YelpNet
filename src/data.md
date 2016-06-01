@@ -12,7 +12,7 @@ Sublists are values that attribute can take. Everything else takes boolean value
     * beer_and_wine
     * full_bar
     * none
-- Ambience (dict of type-booleans)
+- Ambience (dict of key-booleans)
     * casual
     * classy
     * divey
@@ -29,7 +29,7 @@ Sublists are values that attribute can take. Everything else takes boolean value
 - Caters
 - Coat Check
 - Delivery
-- Dietary Restrictions (dict of type-booleans)
+- Dietary Restrictions (dict of key-booleans)
     * dairy-free
     * gluten-free
     * halal
@@ -38,7 +38,7 @@ Sublists are values that attribute can take. Everything else takes boolean value
     * vegan
     * vegetarian
 - Drive-Thru
-- Good For (dict of type-booleans)
+- Good For (dict of key-booleans)
     * breakfast
     * brunch
     * dessert
@@ -50,7 +50,7 @@ Sublists are values that attribute can take. Everything else takes boolean value
 - Good for Kids
 - Happy Hour
 - Has TV
-- Music (dict of type-booleans)
+- Music (dict of key-booleans)
     * background_music
     * dj
     * jukebox
