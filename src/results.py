@@ -29,17 +29,18 @@ def run_net(net, image_file, truth, attributes, op_layer='loss3/classifierx'):
     prob = net.blobs[op_layer].data[0, ...] > 0
     #print(prob)
 
-    true = [attributes[ind] for ind in range(len(attributes)) if bool(truth[ind]) == True]
-    predicted = [attributes[ind] for ind in range(len(attributes)) if bool(prob[ind]) == True]
+    true = [attributes[ind] for ind in range(len(attributes)) if truth[ind]]
+    predicted = [attributes[ind] for ind in range(len(attributes)) if prob[ind]]
+
+    if prob.size() != truth.size():
+        raise Exception("Prediction and Ground Truth labels are not of similar size")
 
     # Score calculated as per http://arxiv.org/pdf/1502.05988.pdf
     numer = 0
     denom = 0
-    for ind in range(len(truth)):
-        if bool(prob[ind]) and bool(truth[ind]):
-            numer += 1
-        elif bool(prob[ind]) or bool(truth[ind]):
-            denom += 1
+    for ind in range(len(attributes)):
+        numer = numer + (int(prob[ind]) * int(truth[ind]))
+        denom = denom + (int(prob[ind]) + int(truth[ind]))
 
     if denom == 0:
         acc = 0
@@ -98,7 +99,9 @@ def main():
         photo_id = d['photo_id']
 
         # create a copy of the attribute dict since we delete entries from the copy
+        # attr should be a dictionary of attributes mapped to 1 or 0
         attr = dict(next(attr for attr in b_attributes if attr['id'] == b_id))
+
         truth = np.zeros(len(attributes_list))
 
         del(attr['id'])
