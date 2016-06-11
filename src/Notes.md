@@ -34,7 +34,7 @@ I have created separate train_val and solver prototxts for each model. To conver
 
 To train, run from src folder (example for GoogleNet):
 
-    ../../caffe/build/tools/caffe train -solver models/solver_googlenet.prototxt -weights models/googlenet_places205/googlenet_places205_train_iter_2400000.caffemodel
+    ../../caffe/build/tools/caffe train -solver models/solver_googlenet.prototxt -weights models/googlenet_places205/googlelet_places205_train_iter_2400000.caffemodel -gpu all
 
 
 Look at results.py to see how the final metric is calculated.
