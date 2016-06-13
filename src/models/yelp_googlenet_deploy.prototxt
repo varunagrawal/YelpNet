@@ -2366,16 +2366,8 @@ layer {
   }
 }
 layer {
-  name: "loss3/multi"
-  type: "SigmoidCrossEntropyLoss"
+  name: "prob"
+  type: "Sigmoid"
   bottom: "loss3/classifierx"
-  bottom: "data_label"
-  top: "loss3/multi"
-  loss_weight: 1
+  top: "prob"
 }
-#layer {
-#  name: "prob"
-#  type: "Softmax"
-#  bottom: "loss3/classifierx"
-#  top: "prob"
-#}

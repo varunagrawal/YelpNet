@@ -1,63 +1,9 @@
 name: "YelpNet"
 layer {
   name: "data"
-  type: "Data"
+  type: "Input"
   top: "data"
-  include {
-    phase: TRAIN
-  }
-  transform_param {
-    mirror: true
-    crop_size: 224
-  }
-  data_param {
-    source: "../data/image-train-lmdb"
-    batch_size: 64
-    backend: LMDB
-  }
-}
-layer {
-  name: "label"
-  type: "Data"
-  top: "label"
-  include {
-    phase: TRAIN
-  }
-  data_param {
-    source: "../data/label-train-lmdb"
-    batch_size: 64
-    backend: LMDB
-  }
-}
-layer {
-  name: "data"
-  type: "Data"
-  top: "data"
-  include {
-    phase: TEST
-  }
-  transform_param {
-    mirror: true
-    crop_size: 224
-  }
-  data_param {
-    source: "../data/image-test-lmdb"
-    batch_size: 16
-    backend: LMDB
-  }
-}
-layer {
-  name: "label"
-  type: "Data"
-  top: "label"
-  include {
-    phase: TEST
-  }
-  data_param {
-    source: "../data/label-test-lmdb"
-    batch_size: 16
-    backend: LMDB
-  }
+  input_param { shape: { dim: 60 dim: 3 dim: 224 dim: 224 } }
 }
 layer {
   name: "conv1"
@@ -387,22 +333,9 @@ layer {
     }
   }
 }
-# Right now accuracy layer only works for single label classification
-#layer {
-#  name: "accuracy"
-#  type: "Accuracy"
-#  bottom: "fc8_finetune"
-#  bottom: "label"
-#  top: "accuracy"
-#  include {
-#    phase: TEST
-#  }
-#}
-#layer {
-  name: "loss"
-  type: "SigmoidCrossEntropyLoss"
+layer {
+  name: "prob"
+  type: "Sigmoid"
   bottom: "fc8_finetune"
-  bottom: "label"
-  top: "loss"
-  loss_weight: 1
+  top: "prob"
 }
