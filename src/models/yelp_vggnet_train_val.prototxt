@@ -8,11 +8,12 @@ layer {
   }
   transform_param {
     mirror: true
+    mean_file: "../data/yelp_mean_file.binaryproto"
     crop_size: 224
   }
   data_param {
     source: "../data/image-train-lmdb"
-    batch_size: 64
+    batch_size: 32
     backend: LMDB
   }
 }
@@ -25,7 +26,7 @@ layer {
   }
   data_param {
     source: "../data/label-train-lmdb"
-    batch_size: 64
+    batch_size: 32
     backend: LMDB
   }
 }
@@ -38,6 +39,7 @@ layer {
   }
   transform_param {
     mirror: true
+    mean_file: "../data/yelp_mean_file.binaryproto"
     crop_size: 224
   }
   data_param {

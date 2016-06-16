@@ -398,7 +398,7 @@ layer {
 #    phase: TEST
 #  }
 #}
-#layer {
+layer {
   name: "loss"
   type: "SigmoidCrossEntropyLoss"
   bottom: "fc8_finetune"

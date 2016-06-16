@@ -27,12 +27,14 @@ def run_net(net, image_file, truth, attributes, op_layer='loss3/classifierx'):
 
     output = net.forward()
     prob = net.blobs[op_layer].data[0, ...] > 0
-    #print(prob)
-
+    
+    # print("Predictions are: {0}".format(prob))
+    # print("Ground truth is: {0}".format(truth))
+    
     true = [attributes[ind] for ind in range(len(attributes)) if truth[ind]]
     predicted = [attributes[ind] for ind in range(len(attributes)) if prob[ind]]
 
-    if prob.size() != truth.size():
+    if prob.size != truth.size:
         raise Exception("Prediction and Ground Truth labels are not of similar size")
 
     # Score calculated as per http://arxiv.org/pdf/1502.05988.pdf
@@ -109,9 +111,11 @@ def main():
         truth = np.zeros(len(attributes_list))
 
         del(attr['id'])
-        for ind, a in enumerate(attributes_list):
+        for ind, a in enumerate(attributes_list):            
             truth[ind] = attr[a]
-
+        
+        # print(attr)
+        # print(truth)
         image_file = "../data/images/" + photo_id + ".jpg"
         
         score = score + run_net(net, image_file, truth, attributes_list, op_layer)
