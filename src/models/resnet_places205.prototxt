@@ -1,10 +1,45 @@
-name: "ResNet-50"
-input: "data"
-input_dim: 1
-input_dim: 3
-input_dim: 224
-input_dim: 224
-
+name: "ResNet-50-Places"
+layer {
+  name: "data"
+  type: "Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TRAIN
+  }
+  transform_param {
+    crop_size: 224
+    mean_file: "/media/hdd_device/placesCNN205_mean.binaryproto"
+	# mean_value: 104
+	# mean_value: 117
+	# mean_value: 123
+    mirror: true
+  }
+  data_param {
+    source: "/media/hdd_device/placesCNN205_train_lmdb"
+    backend: LMDB
+    batch_size: 16
+  }
+}
+layer {
+  name: "data"
+  type: "Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TEST
+  }
+  transform_param {
+    crop_size: 224
+    mean_file: "/media/hdd_device/placesCNN205_mean.binaryproto"
+    mirror: true
+  }
+  data_param {
+    source: "/media/hdd_device/placesCNN205_val_lmdb"
+    backend: LMDB
+    batch_size: 16
+  }
+}
 layer {
 	bottom: "data"
 	top: "conv1"
@@ -2303,17 +2338,43 @@ layer {
 
 layer {
 	bottom: "pool5"
-	top: "fc1000"
-	name: "fc1000"
+	top: "fc205"
+	name: "fc205"
 	type: "InnerProduct"
 	inner_product_param {
-		num_output: 1000
+		num_output: 205
 	}
 }
 
 layer {
-	bottom: "fc1000"
-	top: "prob"
-	name: "prob"
-	type: "Softmax"
+	bottom: "fc205"
+	bottom: "label"
+	top: "loss"
+	name: "loss"
+	type: "SoftmaxWithLoss"
+	loss_weight: 1
+}
+
+layer {
+  name: "accuracy/top-1"
+  type: "Accuracy"
+  bottom: "fc205"
+  bottom: "label"
+  top: "accuracy/top-1"
+  include {
+    phase: TEST
+  }
+}
+layer {
+  name: "accuracy/top-5"
+  type: "Accuracy"
+  bottom: "fc205"
+  bottom: "label"
+  top: "accuracy/top-5"
+  include {
+    phase: TEST
+  }
+  accuracy_param {
+    top_k: 5
+  }
 }

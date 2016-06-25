@@ -2417,7 +2417,7 @@ layer {
   bottom: "pool5/7x7_s1"
   top: "loss3/classifierx"
   param {
-    lr_mult: 1
+    lr_mult: 2
     decay_mult: 1
   }
   param {
