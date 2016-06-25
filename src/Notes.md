@@ -38,3 +38,12 @@ To train, run from src folder (example for GoogleNet):
 
 
 Look at results.py to see how the final metric is calculated.
+
+
+#### On how cropping works
+
+https://github.com/NVIDIA/DIGITS/issues/169
+
+#### Notes on Finetuning
+
+http://cs231n.github.io/transfer-learning/
