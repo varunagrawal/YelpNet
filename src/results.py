@@ -71,6 +71,7 @@ def main():
         print("python2 results.py <the model prototxt> <the model's weights> <the layer name which is the output layer, i.e. before the loss layer>")
         return
     
+    # Set caffe to use the GPU
     caffe.set_mode_gpu()
     caffe.set_device(0)
     
