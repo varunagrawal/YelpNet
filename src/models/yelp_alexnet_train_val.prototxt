@@ -12,7 +12,7 @@ layer {
   }
   data_param {
     source: "../data/image-train-lmdb"
-    batch_size: 64
+    batch_size: 32
     backend: LMDB
   }
 }
@@ -25,7 +25,7 @@ layer {
   }
   data_param {
     source: "../data/label-train-lmdb"
-    batch_size: 64
+    batch_size: 32
     backend: LMDB
   }
 }
@@ -323,16 +323,16 @@ layer {
   }
 }
 layer {
-  name: "fc7_finetune"
+  name: "fc7"
   type: "InnerProduct"
   bottom: "fc6"
-  top: "fc7_finetune"
+  top: "fc7"
   param {
-    lr_mult: 2
+    lr_mult: 1
     decay_mult: 1
   }
   param {
-    lr_mult: 2
+    lr_mult: 1
     decay_mult: 0
   }
   inner_product_param {

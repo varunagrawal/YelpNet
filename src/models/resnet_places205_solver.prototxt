@@ -15,6 +15,8 @@ stepsize: 100000
 gamma: 0.96
 max_iter: 1000000
 snapshot: 50000
-snapshot_prefix: "snapshots/resnet_places205_"
+snapshot_prefix: "snapshots/resnet_places205"
 solver_mode: GPU
-# ./caffe/build/tools/convert_imageset -resize_height=224 -resize_width=224 /media/hdd_device/data/vision/torralba/deeplearning/images256/ /media/hdd_device/trainvalsplit_places205/train_places205.csv
+
+# ./caffe/build/tools/convert_imageset /media/hdd_device/data/vision/torralba/deeplearning/images256/ /media/hdd_device/trainvalsplit_places205/train_places205.csv
+# We don't resize since we do random cropping

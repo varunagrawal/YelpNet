@@ -39,7 +39,8 @@ To train, run from src folder (example for GoogleNet):
 
 Look at results.py to see how the final metric is calculated.
 
-
+If the weights have ft2 in the name, it means I have finetuned (ft) the last 2 FC layers rather than the last FC layer.
+ 
 #### On how cropping works
 
 https://github.com/NVIDIA/DIGITS/issues/169
