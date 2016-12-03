@@ -41,8 +41,8 @@ def run_net(net, image_file, truth, attributes, op_layer='loss3/classifierx'):
     numer = 0
     denom = 0
     for ind in range(len(attributes)):
-        numer = numer + (int(prob[ind]) * int(truth[ind]))
-        denom = denom + (int(prob[ind]) + int(truth[ind]))
+        numer = numer + (int(prob[ind]) and int(truth[ind]))
+        denom = denom + (int(prob[ind]) or int(truth[ind]))
 
     if denom == 0:
         acc = 0
